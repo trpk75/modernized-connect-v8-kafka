@@ -1,13 +1,27 @@
 import { Kafka } from "kafkajs";
 
 export class KafkaBroker {
-  constructor(config) {
+  constructor(config, topics = {}) {
     this.kafka = new Kafka(config);
+    this.topicNames = Object.values(topics);
     this.producer = this.kafka.producer();
     this.consumers = [];
   }
 
   async connect() {
+    if (this.topicNames.length > 0) {
+      const admin = this.kafka.admin();
+      await admin.connect();
+      await admin.createTopics({
+        waitForLeaders: true,
+        topics: this.topicNames.map((topic) => ({
+          topic,
+          numPartitions: 1,
+          replicationFactor: 1
+        }))
+      });
+      await admin.disconnect();
+    }
     await this.producer.connect();
   }
 

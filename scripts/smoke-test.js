@@ -26,8 +26,11 @@ for (let attempt = 0; attempt < 20; attempt += 1) {
   const status = await statusResponse.json();
   if (["COTS_ACKED", "FAILED", "COTS_FAILED", "FILTERED"].includes(status.state)) {
     console.log(JSON.stringify(status, null, 2));
-    process.exit(status.state === "COTS_ACKED" ? 0 : 1);
+    process.exitCode = status.state === "COTS_ACKED" ? 0 : 1;
+    break;
   }
 }
 
-throw new Error("message did not reach terminal state in time");
+if (process.exitCode === undefined) {
+  throw new Error("message did not reach terminal state in time");
+}

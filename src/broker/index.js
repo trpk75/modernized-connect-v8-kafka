@@ -6,7 +6,7 @@ let broker;
 
 export function getBroker() {
   if (!broker) {
-    broker = config.kafkaDisabled ? new MemoryBroker() : new KafkaBroker(config.kafka);
+    broker = config.kafkaDisabled ? new MemoryBroker() : new KafkaBroker(config.kafka, config.topics);
   }
   return broker;
 }
