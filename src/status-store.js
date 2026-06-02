@@ -35,6 +35,12 @@ export class StatusStore {
     return this.cache.get(correlationId);
   }
 
+  list(limit = 25) {
+    return Array.from(this.cache.values())
+      .sort((left, right) => String(right.updatedAt).localeCompare(String(left.updatedAt)))
+      .slice(0, limit);
+  }
+
   async flush() {
     const object = Object.fromEntries(this.cache.entries());
     await fs.writeFile(statusFile, JSON.stringify(object, null, 2));

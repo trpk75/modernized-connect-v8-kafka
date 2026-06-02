@@ -1,5 +1,6 @@
 import express from "express";
 import { randomUUID } from "node:crypto";
+import path from "node:path";
 import { z } from "zod";
 import { config } from "./config.js";
 import { getBroker } from "./broker/index.js";
@@ -27,6 +28,7 @@ export async function startApi() {
   const broker = getBroker();
 
   app.use(express.json({ limit: "2mb" }));
+  app.use(express.static(path.resolve("public")));
 
   app.get("/health", (_req, res) => {
     res.json({
@@ -35,6 +37,11 @@ export async function startApi() {
       kafkaDisabled: config.kafkaDisabled,
       runtime: "V8"
     });
+  });
+
+  app.get("/api/messages", (req, res) => {
+    const limit = Number(req.query.limit || 25);
+    res.json(statusStore.list(Number.isFinite(limit) ? limit : 25));
   });
 
   app.post("/api/messages", async (req, res, next) => {

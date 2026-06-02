@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Modernized Connect Verification</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #172026;
+        --muted: #58646d;
+        --line: #d8dee4;
+        --panel: #ffffff;
+        --surface: #f5f7f8;
+        --accent: #146c5f;
+        --accent-2: #2458a6;
+        --danger: #b3261e;
+        --ok: #16754f;
+        --warn: #9a5a00;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+        color: var(--ink);
+        background: var(--surface);
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 24px;
+        border-bottom: 1px solid var(--line);
+        background: var(--panel);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 650;
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: minmax(320px, 0.9fr) minmax(420px, 1.1fr);
+        gap: 18px;
+        padding: 18px;
+      }
+
+      section {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        min-width: 0;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 650;
+      }
+
+      .body {
+        padding: 16px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      textarea, input {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 10px;
+        font: 13px Consolas, "Courier New", monospace;
+        color: var(--ink);
+        background: #fff;
+      }
+
+      textarea {
+        min-height: 190px;
+        resize: vertical;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      button {
+        border: 1px solid transparent;
+        border-radius: 6px;
+        padding: 9px 12px;
+        font-size: 14px;
+        font-weight: 650;
+        cursor: pointer;
+      }
+
+      button.primary {
+        color: white;
+        background: var(--accent);
+      }
+
+      button.secondary {
+        color: var(--accent-2);
+        border-color: #b8c7df;
+        background: #f7faff;
+      }
+
+      button:disabled {
+        cursor: wait;
+        opacity: 0.65;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 28px;
+        border-radius: 999px;
+        padding: 4px 10px;
+        color: var(--muted);
+        background: #eef2f4;
+        font-size: 13px;
+        font-weight: 650;
+      }
+
+      .pill.ok {
+        color: var(--ok);
+        background: #e7f5ee;
+      }
+
+      .pill.warn {
+        color: var(--warn);
+        background: #fff3df;
+      }
+
+      .pill.fail {
+        color: var(--danger);
+        background: #fdebea;
+      }
+
+      .timeline {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(86px, 1fr));
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .step {
+        min-height: 56px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 8px;
+        color: var(--muted);
+        background: #fafbfc;
+        font-size: 12px;
+        font-weight: 650;
+      }
+
+      .step.active {
+        color: var(--accent);
+        border-color: #8cc7ba;
+        background: #eefaf7;
+      }
+
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .metric {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 10px;
+        background: #fbfcfd;
+      }
+
+      .metric span {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 650;
+      }
+
+      .metric strong {
+        display: block;
+        margin-top: 4px;
+        font-size: 15px;
+        overflow-wrap: anywhere;
+      }
+
+      pre {
+        min-height: 220px;
+        max-height: 430px;
+        margin: 0;
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 12px;
+        background: #101820;
+        color: #e8f0f2;
+        font: 12px Consolas, "Courier New", monospace;
+        line-height: 1.45;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      th, td {
+        padding: 9px 8px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      td {
+        overflow-wrap: anywhere;
+      }
+
+      .recent {
+        grid-column: 1 / -1;
+      }
+
+      @media (max-width: 900px) {
+        main, .row, .summary, .timeline {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Modernized Connect Verification</h1>
+      <div id="health" class="pill warn">Checking Kafka</div>
+    </header>
+
+    <main>
+      <section>
+        <div class="section-header">
+          <h2>Submit HL7 ADT Message</h2>
+          <button class="secondary" id="reset">Reset</button>
+        </div>
+        <div class="body">
+          <div class="row">
+            <div>
+              <label for="channelId">Channel</label>
+              <input id="channelId" value="adt-demo">
+            </div>
+            <div>
+              <label for="target">COTS Target</label>
+              <input id="target" value="mock-cots">
+            </div>
+          </div>
+          <label for="hl7">Message</label>
+          <textarea id="hl7" spellcheck="false"></textarea>
+          <div class="actions">
+            <button class="primary" id="submit">Run Migration Check</button>
+            <span id="submitState" class="pill">Idle</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-header">
+          <h2>Kafka Processing Result</h2>
+          <span id="state" class="pill">No message</span>
+        </div>
+        <div class="body">
+          <div class="timeline">
+            <div class="step" data-step="RECEIVED">Received</div>
+            <div class="step" data-step="FILTERING">Filter</div>
+            <div class="step" data-step="TRANSFORMING">Transform</div>
+            <div class="step" data-step="COTS_DELIVERING">COTS route</div>
+            <div class="step" data-step="COTS_ACKED">ACK</div>
+          </div>
+          <div class="summary">
+            <div class="metric"><span>Correlation</span><strong id="correlation">-</strong></div>
+            <div class="metric"><span>Patient</span><strong id="patient">-</strong></div>
+            <div class="metric"><span>Event</span><strong id="eventType">-</strong></div>
+          </div>
+          <pre id="result">{}</pre>
+        </div>
+      </section>
+
+      <section class="recent">
+        <div class="section-header">
+          <h2>Recent Verification Runs</h2>
+          <button class="secondary" id="refresh">Refresh</button>
+        </div>
+        <div class="body">
+          <table>
+            <thead>
+              <tr>
+                <th>Updated</th>
+                <th>State</th>
+                <th>Channel</th>
+                <th>Patient</th>
+                <th>Correlation</th>
+              </tr>
+            </thead>
+            <tbody id="recent"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const sample = `MSH|^~\\&|LAB|HOSP|COTS|VENDOR|20260602101500||ADT^A01|MSG00001|P|2.5
+PID|1||123456^^^HOSP^MR||Doe^Jane||19800115|F|||100 Main St^^Boston^MA^02101||555-0100
+PV1|1|I|ICU^101^1||||1234^House^Gregory`;
+
+      const terminalStates = new Set(["COTS_ACKED", "FAILED", "COTS_FAILED", "FILTERED"]);
+      const hl7 = document.querySelector("#hl7");
+      const submit = document.querySelector("#submit");
+      const submitState = document.querySelector("#submitState");
+      const state = document.querySelector("#state");
+      const result = document.querySelector("#result");
+      const correlation = document.querySelector("#correlation");
+      const patient = document.querySelector("#patient");
+      const eventType = document.querySelector("#eventType");
+      const recent = document.querySelector("#recent");
+      const health = document.querySelector("#health");
+
+      hl7.value = sample;
+
+      document.querySelector("#reset").addEventListener("click", () => {
+        hl7.value = sample;
+      });
+
+      document.querySelector("#refresh").addEventListener("click", loadRecent);
+      submit.addEventListener("click", runCheck);
+
+      async function checkHealth() {
+        try {
+          const response = await fetch("/health");
+          const json = await response.json();
+          health.textContent = json.kafkaDisabled ? "Kafka disabled" : "Kafka enabled";
+          health.className = json.kafkaDisabled ? "pill warn" : "pill ok";
+        } catch {
+          health.textContent = "Offline";
+          health.className = "pill fail";
+        }
+      }
+
+      async function runCheck() {
+        submit.disabled = true;
+        submitState.textContent = "Submitting";
+        submitState.className = "pill warn";
+
+        const response = await fetch("/api/messages", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            channelId: document.querySelector("#channelId").value,
+            raw: hl7.value,
+            target: { system: document.querySelector("#target").value }
+          })
+        });
+
+        const accepted = await response.json();
+        correlation.textContent = accepted.correlationId || "-";
+
+        if (!response.ok) {
+          renderStatus({ state: "FAILED", error: accepted.error || "submit failed" });
+          submit.disabled = false;
+          return;
+        }
+
+        await poll(accepted.statusUrl);
+      }
+
+      async function poll(statusUrl) {
+        for (let attempt = 0; attempt < 40; attempt += 1) {
+          const response = await fetch(statusUrl);
+          const status = await response.json();
+          renderStatus(status);
+          if (terminalStates.has(status.state)) {
+            submit.disabled = false;
+            submitState.textContent = "Complete";
+            submitState.className = status.state === "COTS_ACKED" ? "pill ok" : "pill fail";
+            await loadRecent();
+            return;
+          }
+          await new Promise((resolve) => setTimeout(resolve, 500));
+        }
+
+        submit.disabled = false;
+        submitState.textContent = "Timed out";
+        submitState.className = "pill fail";
+      }
+
+      function renderStatus(status) {
+        state.textContent = status.state || "Unknown";
+        state.className = status.state === "COTS_ACKED" ? "pill ok" : terminalStates.has(status.state) ? "pill fail" : "pill warn";
+        patient.textContent = status.patientId || "-";
+        eventType.textContent = status.eventType || "-";
+        result.textContent = JSON.stringify(status, null, 2);
+        document.querySelectorAll(".step").forEach((step) => {
+          step.classList.toggle("active", isStepActive(status.state, step.dataset.step));
+        });
+      }
+
+      function isStepActive(current, step) {
+        const order = ["RECEIVED", "FILTERING", "TRANSFORMING", "ACCEPTED", "COTS_DELIVERING", "COTS_ACKED"];
+        const currentIndex = order.indexOf(current);
+        const stepIndex = order.indexOf(step);
+        return currentIndex >= 0 && stepIndex >= 0 && stepIndex <= currentIndex;
+      }
+
+      async function loadRecent() {
+        const response = await fetch("/api/messages?limit=10");
+        const rows = await response.json();
+        recent.innerHTML = rows.map((row) => `
+          <tr>
+            <td>${escapeHtml(row.updatedAt || "")}</td>
+            <td>${escapeHtml(row.state || "")}</td>
+            <td>${escapeHtml(row.channelId || "")}</td>
+            <td>${escapeHtml(row.patientId || "")}</td>
+            <td>${escapeHtml(row.correlationId || "")}</td>
+          </tr>
+        `).join("");
+      }
+
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        })[char]);
+      }
+
+      checkHealth();
+      loadRecent();
+    </script>
+  </body>
+</html>
