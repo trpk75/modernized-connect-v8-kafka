@@ -1,5 +1,6 @@
 node_modules/
 data/*.json
+data/pids/
 !data/.gitkeep
 .env
 .kafka/
