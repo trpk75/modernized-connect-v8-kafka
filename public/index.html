@@ -261,6 +261,27 @@
         grid-column: 1 / -1;
       }
 
+      .toast {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 10;
+        max-width: min(420px, calc(100vw - 36px));
+        border: 1px solid #a9d8ca;
+        border-radius: 8px;
+        padding: 12px 14px;
+        color: var(--ink);
+        background: #eefaf7;
+        box-shadow: 0 12px 32px rgba(23, 32, 38, 0.18);
+        font-size: 14px;
+        transform: translateY(120%);
+        transition: transform 180ms ease;
+      }
+
+      .toast.visible {
+        transform: translateY(0);
+      }
+
       @media (max-width: 900px) {
         main, .row, .summary, .timeline {
           grid-template-columns: 1fr;
@@ -343,6 +364,7 @@
         </div>
       </section>
     </main>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
     <script>
       const sample = `MSH|^~\\&|LAB|HOSP|COTS|VENDOR|20260602101500||ADT^A01|MSG00001|P|2.5
@@ -360,6 +382,7 @@ PV1|1|I|ICU^101^1||||1234^House^Gregory`;
       const eventType = document.querySelector("#eventType");
       const recent = document.querySelector("#recent");
       const health = document.querySelector("#health");
+      const toast = document.querySelector("#toast");
 
       hl7.value = sample;
 
@@ -418,6 +441,7 @@ PV1|1|I|ICU^101^1||||1234^House^Gregory`;
             submit.disabled = false;
             submitState.textContent = "Complete";
             submitState.className = status.state === "COTS_ACKED" ? "pill ok" : "pill fail";
+            notify(status);
             await loadRecent();
             return;
           }
@@ -469,6 +493,20 @@ PV1|1|I|ICU^101^1||||1234^House^Gregory`;
           '"': "&quot;",
           "'": "&#039;"
         })[char]);
+      }
+
+      function notify(status) {
+        const message = status.state === "COTS_ACKED"
+          ? `Migration verified: ${status.eventType || "event"} for patient ${status.patientId || "unknown"}`
+          : `Migration finished with state ${status.state}`;
+
+        toast.textContent = message;
+        toast.classList.add("visible");
+        window.setTimeout(() => toast.classList.remove("visible"), 7000);
+
+        if ("Notification" in window && Notification.permission === "granted") {
+          new Notification("Modernized Connect", { body: message });
+        }
       }
 
       checkHealth();
