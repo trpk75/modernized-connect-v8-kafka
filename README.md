@@ -37,6 +37,33 @@ In another terminal:
 npm run smoke
 ```
 
+## Run As Non-Docker Microservices
+
+Start Kafka first:
+
+```powershell
+.\scripts\start-kafka-background.ps1
+```
+
+Start the services as separate Windows processes:
+
+```powershell
+.\scripts\start-microservices.ps1
+```
+
+Hosted services:
+
+- API and GUI: `http://127.0.0.1:7070`
+- V8 worker: background Kafka consumer
+- COTS adapter: background Kafka consumer
+- Mock COTS API: `http://127.0.0.1:7071`
+
+Stop tracked services:
+
+```powershell
+.\scripts\stop-microservices.ps1
+```
+
 ## API
 
 Submit a channel message:

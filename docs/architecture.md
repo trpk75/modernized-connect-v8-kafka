@@ -10,6 +10,7 @@ flowchart LR
   Worker --> Failed["Kafka: connect.message.failed"]
   Accepted --> CotsTopic["Kafka: connect.cots.outbound"]
   CotsTopic --> CotsAdapter["COTS adapter service"]
+  CotsAdapter --> MockCots["Mock COTS API"]
   CotsAdapter --> Ack["Kafka: connect.cots.ack"]
   CotsAdapter --> Dlq["Kafka: connect.deadletter"]
 ```
@@ -43,5 +44,6 @@ Kafka topics represent the modernized channel lifecycle. In local development, s
 
 - Run multiple API instances behind a load balancer.
 - Run multiple workers in the same consumer group for horizontal processing.
+- Run the API, V8 worker, COTS adapter, and COTS API as separate non-Docker Windows processes.
 - Partition by `channelId` or `patientId` where ordering matters.
 - Use the dead-letter topic for retry orchestration and operational triage.

@@ -9,7 +9,8 @@ export const config = {
     timeoutMs: Number(process.env.V8_SCRIPT_TIMEOUT_MS || 750)
   },
   cots: {
-    endpoint: process.env.COTS_ENDPOINT || "http://localhost:7070/mock-cots"
+    endpoint: process.env.COTS_ENDPOINT || "http://127.0.0.1:7071/mock-cots",
+    mockPort: Number(process.env.COTS_MOCK_PORT || 7071)
   },
   topics: {
     received: "connect.message.received",

@@ -10,6 +10,10 @@ export class StatusStore {
 
   async init() {
     await fs.mkdir(path.dirname(statusFile), { recursive: true });
+    await this.loadFromDisk();
+  }
+
+  async loadFromDisk() {
     try {
       const data = JSON.parse(await fs.readFile(statusFile, "utf8"));
       this.cache = new Map(Object.entries(data));
@@ -19,6 +23,7 @@ export class StatusStore {
   }
 
   async upsert(correlationId, patch) {
+    await this.loadFromDisk();
     const current = this.cache.get(correlationId) || {};
     const next = {
       ...current,
@@ -31,11 +36,13 @@ export class StatusStore {
     return next;
   }
 
-  get(correlationId) {
+  async get(correlationId) {
+    await this.loadFromDisk();
     return this.cache.get(correlationId);
   }
 
-  list(limit = 25) {
+  async list(limit = 25) {
+    await this.loadFromDisk();
     return Array.from(this.cache.values())
       .sort((left, right) => String(right.updatedAt).localeCompare(String(left.updatedAt)))
       .slice(0, limit);

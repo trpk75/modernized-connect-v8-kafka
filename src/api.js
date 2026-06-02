@@ -39,9 +39,9 @@ export async function startApi() {
     });
   });
 
-  app.get("/api/messages", (req, res) => {
+  app.get("/api/messages", async (req, res) => {
     const limit = Number(req.query.limit || 25);
-    res.json(statusStore.list(Number.isFinite(limit) ? limit : 25));
+    res.json(await statusStore.list(Number.isFinite(limit) ? limit : 25));
   });
 
   app.post("/api/messages", async (req, res, next) => {
@@ -78,21 +78,13 @@ export async function startApi() {
     }
   });
 
-  app.get("/api/messages/:correlationId", (req, res) => {
-    const status = statusStore.get(req.params.correlationId);
+  app.get("/api/messages/:correlationId", async (req, res) => {
+    const status = await statusStore.get(req.params.correlationId);
     if (!status) {
       res.status(404).json({ error: "message status not found" });
       return;
     }
     res.json(status);
-  });
-
-  app.post("/mock-cots", (req, res) => {
-    res.json({
-      accepted: true,
-      vendorMessageId: `COTS-${Date.now()}`,
-      received: req.body?.correlationId
-    });
   });
 
   app.use((error, _req, res, _next) => {

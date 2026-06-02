@@ -9,6 +9,7 @@
     "api": "node src/index.js api",
     "worker": "node src/index.js worker",
     "cots": "node src/index.js cots",
+    "cots:mock": "node src/index.js cots-mock",
     "dev": "node src/index.js all",
     "smoke": "node scripts/smoke-test.js",
     "smoke:integration": "node scripts/integration-smoke.js"

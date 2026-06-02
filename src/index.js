@@ -2,6 +2,7 @@ import { getBroker } from "./broker/index.js";
 import { startApi } from "./api.js";
 import { startMessageWorker } from "./services/message-worker.js";
 import { startCotsAdapter } from "./services/cots-adapter.js";
+import { startCotsMockApi } from "./services/cots-mock-api.js";
 import { statusStore } from "./status-store.js";
 import { logger } from "./logger.js";
 
@@ -24,6 +25,11 @@ async function main() {
   if (mode === "cots" || mode === "all") {
     await startCotsAdapter();
     logger.info("COTS adapter running");
+  }
+
+  if (mode === "cots-mock" || mode === "all") {
+    await startCotsMockApi();
+    logger.info("mock COTS API listening");
   }
 }
 
