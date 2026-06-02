@@ -64,6 +64,17 @@ Stop tracked services:
 .\scripts\stop-microservices.ps1
 ```
 
+## Run As One Node Host
+
+If you want the same service modules hosted in one Node.js process instead of separate processes:
+
+```powershell
+.\scripts\start-kafka-background.ps1
+.\scripts\start-combined-host.ps1
+```
+
+This starts API/GUI, V8 worker, COTS adapter, and mock COTS API from one Node process.
+
 ## API
 
 Submit a channel message:
