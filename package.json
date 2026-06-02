@@ -11,6 +11,7 @@
     "cots": "node src/index.js cots",
     "cots:mock": "node src/index.js cots-mock",
     "dev": "node src/index.js all",
+    "test": "node --test test/*.test.js",
     "smoke": "node scripts/smoke-test.js",
     "smoke:integration": "node scripts/integration-smoke.js"
   },
