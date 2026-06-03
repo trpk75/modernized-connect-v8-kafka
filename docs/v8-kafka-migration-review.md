@@ -1,5 +1,5 @@
 # Claude Code Review: V8/Kafka Modernization of NextGen Connect HL7 ADT Channel
-**Automated review by Claude Code
+**Automated review** by Claude Code
 **Repository:** `trpk75/modernized-connect-v8-kafka`  
 **Source Reference:** `nextgenhealthcare/connect` (Rhino filter/transform surface)  
 **Review Date:** June 2026  
