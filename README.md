@@ -223,6 +223,7 @@ GitHub Actions workflow:
 - [Test cases](docs/test-cases.md)
 - [Architecture](docs/architecture.md)
 - [Architecture diagrams](docs/architecture-diagrams.md)
+- [V8/Kafka migration review report](docs/v8-kafka-migration-review.md)
 
 ## Repository Layout
 
